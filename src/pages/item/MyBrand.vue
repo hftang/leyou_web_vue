@@ -2,7 +2,10 @@
   <v-card>
 
     <v-card-title class="layout row">
-      <v-btn color="primary">新增产品</v-btn>
+      <!--添加品牌的按钮-->
+
+
+      <v-btn color="primary" @click="show=true">新增品牌</v-btn>
 
       <!--填充中间空间-->
       <v-spacer/>
@@ -32,7 +35,31 @@
         </td>
       </template>
     </v-data-table>
+
+    <!--dialog弹窗-->
+    <v-dialog v-model="show" max-width="500" scrollable persistent>
+      <v-card>
+        <v-toolbar color="primary" dense dark class="subheading px-2">
+          <span> 新增品牌</span>
+          <v-spacer/>
+          <v-btn icon @click="show=false">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-card-text style="height: 600px" class="px-5">
+          <!--这里是写表单的-->
+          <my-brand-form>
+
+          </my-brand-form>
+        </v-card-text>
+
+      </v-card>
+
+    </v-dialog>
+
   </v-card>
+
+
 </template>
 
 <script>
@@ -51,7 +78,8 @@
         pagination: {},
         totalBrands: 0,
         loading: false,
-        search: ""
+        search: "",
+        show: false
 
 
       }
@@ -82,17 +110,17 @@
             rows: this.pagination.rowsPerPage,
             sortBy: this.pagination.sortBy,
             desc: this.pagination.descending,
-            key:this.search,
+            key: this.search,
           }
-        }).then(respon=>{
+        }).then(respon => {
           console.log(respon);
           //赋值
 
-          this.brands=respon.data.items
-          this.totalBrands=respon.data.total
-          this.loading=false
+          this.brands = respon.data.items
+          this.totalBrands = respon.data.total
+          this.loading = false
 
-        }).catch(rejest=>{
+        }).catch(rejest => {
           console.log(rejest);
         })
 
@@ -104,6 +132,10 @@
         // }, 1000)
       }
 
+    },
+    components: {
+      //  导入表单
+      MyBrandForm: () => import("./MyBrandForm")
     }
   }
 </script>
